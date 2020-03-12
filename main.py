@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-import pygame
+from tetris.interface import Tetris
 
-print(f"HELLO {pygame.version.ver}")
-
-
+if __name__ == "__main__":
+    game = Tetris()
+    game.init()
+    game.run_tetris()
