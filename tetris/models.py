@@ -24,6 +24,10 @@ class Piece(object):
     def column(self):
         return self.position[1]
 
+    @property
+    def width(self):
+        return len(self.shape[0])
+
 
 class Board(object):
     rows, cols = size = (16, 10)
@@ -53,6 +57,20 @@ class Board(object):
         piece = Piece()
         piece.position = (0, Board.cols // 2)
         self.pieces.append(piece)
+
+    def move_piece_left(self):
+        for piece in self.pieces:
+            if piece.position[1] > 0:
+                new_position = (piece.position[0], piece.position[1]-1)
+                if not self._check_collision(new_position, piece.shape):
+                    piece.position = new_position
+
+    def move_piece_right(self):
+        for piece in self.pieces:
+            if piece.position[1] + piece.width < Board.cols:
+                new_position = (piece.position[0], piece.position[1]+1)
+                if not self._check_collision(new_position, piece.shape):
+                    piece.position = new_position
 
     def next(self):
         for piece in self.pieces:

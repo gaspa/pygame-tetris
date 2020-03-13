@@ -58,6 +58,10 @@ class Tetris(object):
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
                         self.board.next()
+                    if event.key == pygame.K_LEFT:
+                        self.board.move_piece_left()
+                    if event.key == pygame.K_RIGHT:
+                        self.board.move_piece_right()
 
             self.screen.fill(black)
             # draw the board:
