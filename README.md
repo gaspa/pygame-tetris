@@ -13,4 +13,8 @@ source ./venv/bin/activate
 pip install pygame
 python main.py
 ```
-3. press space to make steps.
+## Play
+
+ press space to make the block drop one step
+ left/right to move (guess where? ;) 
+ up to rotate the block.
