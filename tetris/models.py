@@ -1,6 +1,21 @@
 #!/usr/bin/env python
 import random
 
+shapes = [[[1, 1],
+           [1, 1]],
+          [[1, 1, 0],
+           [0, 1, 1]],
+          [[0, 1, 1],
+           [1, 1, 0]],
+          [[1, 1, 1, 1]],
+          [[1, 1, 1],
+           [0, 1, 0]],
+          [[1, 0, 0],
+           [1, 1, 1]],
+          [[0, 0, 1],
+           [1, 1, 1]]
+          ]
+
 
 class Piece(object):
     def __init__(self):
@@ -9,10 +24,6 @@ class Piece(object):
 
     @staticmethod
     def _generate_shape():
-        shapes = [[[1, 1],
-                   [1, 1]],
-                  [[0, 1, 1, 0],
-                   [0, 0, 1, 1]]]
         random_shape = random.randrange(0, len(shapes))
         return shapes[random_shape]
 
@@ -27,6 +38,11 @@ class Piece(object):
     @property
     def width(self):
         return len(self.shape[0])
+
+    def rotate(self):
+        self.shape = [[self.shape[y][x]
+                       for y in range(len(self.shape))]
+                      for x in range(len(self.shape[0]) - 1, -1, -1)]
 
 
 class Board(object):
@@ -61,14 +77,14 @@ class Board(object):
     def move_piece_left(self):
         for piece in self.pieces:
             if piece.position[1] > 0:
-                new_position = (piece.position[0], piece.position[1]-1)
+                new_position = (piece.position[0], piece.position[1] - 1)
                 if not self._check_collision(new_position, piece.shape):
                     piece.position = new_position
 
     def move_piece_right(self):
         for piece in self.pieces:
             if piece.position[1] + piece.width < Board.cols:
-                new_position = (piece.position[0], piece.position[1]+1)
+                new_position = (piece.position[0], piece.position[1] + 1)
                 if not self._check_collision(new_position, piece.shape):
                     piece.position = new_position
 

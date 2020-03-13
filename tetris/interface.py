@@ -62,6 +62,8 @@ class Tetris(object):
                         self.board.move_piece_left()
                     if event.key == pygame.K_RIGHT:
                         self.board.move_piece_right()
+                    if event.key == pygame.K_UP:
+                        self.board.pieces[0].rotate()
 
             self.screen.fill(black)
             # draw the board:
