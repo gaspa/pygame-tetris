@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import random
 
 
 class Piece(object):
@@ -8,7 +9,12 @@ class Piece(object):
 
     @staticmethod
     def _generate_shape():
-        return [[1, 1], [1, 1]]
+        shapes = [[[1, 1],
+                   [1, 1]],
+                  [[0, 1, 1, 0],
+                   [0, 0, 1, 1]]]
+        random_shape = random.randrange(0, len(shapes))
+        return shapes[random_shape]
 
     @property
     def row(self):
@@ -35,7 +41,7 @@ class Board(object):
                        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                       [0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                        [0, 0, 0, 1, 1, 0, 0, 0, 0, 0],
@@ -60,6 +66,8 @@ class Board(object):
 
     def _check_collision(self, position, shape):
         for row, shape_row in enumerate(shape):
+            if (position[0] + row) >= Board.rows:
+                return True
             for column, shape_value in enumerate(shape_row):
                 if shape_value and self.landed[position[0] + row][position[1] + column]:
                     return True
@@ -68,7 +76,8 @@ class Board(object):
     def _update_landed(self, position, shape):
         for row, shape_row in enumerate(shape):
             for column, shape_value in enumerate(shape_row):
-                self.landed[position[0] + row][position[1] + column] = shape_value
+                if shape_value:
+                    self.landed[position[0] + row][position[1] + column] = 1
 
     def _remove_piece(self, piece):
         self.pieces.remove(piece)
