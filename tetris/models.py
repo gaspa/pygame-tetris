@@ -49,25 +49,10 @@ class Board(object):
     rows, cols = size = (16, 10)
 
     def __init__(self):
-        self.landed = [[0] * Board.cols] * Board.rows
-        # Test board with some landed block here and there...
-        self.landed = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                       [0, 0, 0, 1, 1, 0, 0, 0, 0, 0],
-                       [0, 0, 0, 1, 1, 0, 0, 0, 0, 0],
-                       [0, 0, 0, 1, 1, 0, 0, 0, 0, 0]]
+        self.landed = [[0] * Board.cols for x in range(Board.rows)]
         self.pieces = []
+        self.started = False
+        self.game_over = False
 
     def add_piece(self):
         piece = Piece()
@@ -88,15 +73,27 @@ class Board(object):
                 if not self._check_collision(new_position, piece.shape):
                     piece.position = new_position
 
+    def drop_piece(self):
+        for piece in self.pieces:
+            while True:
+                new_position = (piece.position[0] + 1, piece.position[1])
+                if self._check_collision(new_position, piece.shape):
+                    break
+                piece.position = new_position
+
+
     def next(self):
         for piece in self.pieces:
             new_position = (piece.position[0] + 1, piece.position[1])
             if not self._check_collision(new_position, piece.shape):
                 piece.position = new_position
+            elif piece.position[0] == 0:
+                self.game_over = True
             else:
                 self._update_landed(piece.position, piece.shape)
                 self._remove_piece(piece)
                 self.add_piece()
+        self._prune_full_lines()
 
     def _check_collision(self, position, shape):
         for row, shape_row in enumerate(shape):
@@ -115,3 +112,10 @@ class Board(object):
 
     def _remove_piece(self, piece):
         self.pieces.remove(piece)
+
+    def _prune_full_lines(self):
+        for row in self.landed:
+            if all(row):
+                self.landed.remove(row)
+                self.landed.insert(0, [0] * Board.cols)
+

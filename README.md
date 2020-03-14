@@ -1,8 +1,8 @@
 # Tetris
 
-just a simple project to learn pygame mechanics.
+Just a simple project to learn pygame mechanics.
 
-## install
+## Install
 
 1. clone this repository
 2. do the following:
@@ -15,6 +15,8 @@ python main.py
 ```
 ## Play
 
- press space to make the block drop one step
- left/right to move (guess where? ;) 
- up to rotate the block.
+Press space to start game.
+Keys:
+* left/right keys to move (guess where? ;) ) 
+* up key rotate the block.
+* down drop the block.

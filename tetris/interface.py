@@ -21,6 +21,8 @@ class Tetris(object):
 
     def init(self):
         pygame.init()
+        self.clock = pygame.time.Clock()
+        pygame.time.set_timer(pygame.USEREVENT, 1000)
         self.screen = pygame.display.set_mode(screen_size)
         self.screen.fill(black)
 
@@ -52,18 +54,24 @@ class Tetris(object):
 
     def run_tetris(self):
         while 1:
+            self.clock.tick(30)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
+                if event.type == pygame.USEREVENT:
+                    if self.board.started and not self.board.game_over:
+                        self.board.next()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
-                        self.board.next()
+                        self.board.started = True
                     if event.key == pygame.K_LEFT:
                         self.board.move_piece_left()
                     if event.key == pygame.K_RIGHT:
                         self.board.move_piece_right()
                     if event.key == pygame.K_UP:
                         self.board.pieces[0].rotate()
+                    if event.key == pygame.K_DOWN:
+                        self.board.drop_piece()
 
             self.screen.fill(black)
             # draw the board:
