@@ -53,11 +53,15 @@ class Board(object):
         self.pieces = []
         self.started = False
         self.game_over = False
+        self.points = 0
+        self.level = 1
+        self.next_piece = Piece()
 
     def add_piece(self):
-        piece = Piece()
+        piece = self.next_piece
         piece.position = (0, Board.cols // 2)
         self.pieces.append(piece)
+        self.next_piece = Piece()
 
     def move_piece_left(self):
         for piece in self.pieces:
